@@ -14,53 +14,16 @@ let arrMoviesTemp = [];
 window.scifi = {
 
 getSciFiData : (arrMovies) => {
-    containerMovies.innerHTML = ''; 
-    
         arrMovies.map((idMovie) => {
     
-            fetch('http://www.omdbapi.com/?i=' + idMovie + ' &apikey=715025ae')
+            fetch('https://www.omdbapi.com/?i=' + idMovie + ' &apikey=715025ae')
             .then( response => response.json())
-            .then( movies => {
-                
-                    arrMoviesTemp.push(movies);
-                           
-                containerMovies.innerHTML +=  `<section> 
-                                        <div class="flip-card card-block" style="width:400px heigth:500px">
-
-                                            <div class="flip-card-inner">
-                                                                                                
-                                                <div class="flip-card-front">
-                                                    <img class="card-img" src='${movies.Poster}' alt="Card image" style="width:100%"">
-                                                    
-                                                    <div class="">
-                                                    <h3 class="card-title" id="title-movie">${movies.Title}</h3>
-                                                    </div>
-
-                                                </div>                                                
-                            
-                                                <div class="flip-card-back">
-                                                    <h3 class="flip-card-title">${movies.Title}</h3>
-                                                    <p class="card-text"> <span style="font-weight:bold"> Plot </span>: ${movies.Plot}</p>
-                                                    <p class="card-text"> <span style="font-weight:bold"> Duración </span>: ${movies.Runtime}</p>
-                                                    <p class="card-text"> <span style="font-weight:bold"> Género </span>: ${movies.Genre}</p>
-                                                    <p class="card-text"> <span style="font-weight:bold"> Nominaciones </span>: ${movies.Awards}</p>
-                                                    <p class="card-text"> <span style="font-weight:bold"> Director </span>: ${movies.Director}</p>
-                                                    <p class="card-text"> <span style="font-weight:bold"> Actores </span>: ${movies.Actors}</p>                                                                                                                                        
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-                                                
-                                                </section>`;
-            
-            });
-            
+            .then( movies => {          
+                    arrMoviesTemp.push(movies);           
+            });            
     })
     return arrMoviesTemp;
 },
-
-
 
 orderData : (array, orderAll, condicion) => {
 
@@ -84,13 +47,56 @@ if (orderAll === 'Todos'){
         return ordered
     }
     
-}
+},
+
+showData : (arrMovies) => {
+    containerMovies.innerHTML = ''; 
+    arrMovies.forEach(movies => {
+        containerMovies.innerHTML +=  `<section> 
+        <div class="flip-card card-block" style="width:400px heigth:500px">
+
+            <div class="flip-card-inner">
+                                                                
+                <div class="flip-card-front">
+                    <img class="card-img" src='${movies.Poster}' alt="Card image" style="width:100%"">
+                    
+                    <div class="">
+                    <h3 class="card-title" id="title-movie">${movies.Title}</h3>
+                    </div>
+
+                </div>                                                
+
+                <div class="flip-card-back">
+                    <h3 class="flip-card-title">${movies.Title}</h3>
+                    <p class="card-text"> <span style="font-weight:bold"> Plot </span>: ${movies.Plot}</p>
+                    <p class="card-text"> <span style="font-weight:bold"> Duración </span>: ${movies.Runtime}</p>
+                    <p class="card-text"> <span style="font-weight:bold"> Género </span>: ${movies.Genre}</p>
+                    <p class="card-text"> <span style="font-weight:bold"> Nominaciones </span>: ${movies.Awards}</p>
+                    <p class="card-text"> <span style="font-weight:bold"> Director </span>: ${movies.Director}</p>
+                    <p class="card-text"> <span style="font-weight:bold"> Actores </span>: ${movies.Actors}</p>                                                                                                                                        
+                </div>
+
+            </div>
+
+        </div>
+                
+                </section>`;
+    });
+    }
 };
+
+const LoadData = () => {
+    arrMostFamous = scifi.getSciFiData(mostFamous);
+    arrMostAwarded = scifi.getSciFiData(mostAwarded);
+    arrBlockbuster = scifi.getSciFiData(blockbuster);
+    arrMoreRealistic = scifi.getSciFiData(moreRealistic);
+}
+
+LoadData();
 
 document.getElementById('container-slide-buttons').classList.remove('hide');
 
 const btnFamousMovies = document.getElementById('btn-famous-movies');
-
 btnFamousMovies.addEventListener('click', () =>{
     document.getElementById('title-famous').classList.remove('hide');
     document.getElementById('container-cards').classList.remove('hide');
@@ -98,13 +104,12 @@ btnFamousMovies.addEventListener('click', () =>{
     document.getElementById('title-awarded').classList.add('hide');
     document.getElementById('title-blockbuster').classList.add('hide');
     document.getElementById('title-realistic').classList.add('hide');
-    arrMostFamous = ''; 
-    arrMostFamous = scifi.getSciFiData(mostFamous);
+
+    scifi.showData(arrMostFamous);
     document.getElementById('sort-menu').classList.remove('hide');
 });
 
 const btnAwardedMovies = document.getElementById('btn-awarded-movies');
-
 btnAwardedMovies.addEventListener('click', () =>{
     document.getElementById('title-awarded').classList.remove('hide');
     document.getElementById('container-cards').classList.remove('hide');
@@ -112,13 +117,12 @@ btnAwardedMovies.addEventListener('click', () =>{
     document.getElementById('title-famous').classList.add('hide'); 
     document.getElementById('title-blockbuster').classList.add('hide');
     document.getElementById('title-realistic').classList.add('hide'); 
-    arrMostAwarded = ''; 
-    arrMostAwarded = scifi.getSciFiData(mostAwarded);
+
+    scifi.showData(mostAwarded);
     document.getElementById('sort-menu').classList.remove('hide');
 });
 
 const btnBlockbusterMovies = document.getElementById('btn-blockbuster-movies');
-
 btnBlockbusterMovies.addEventListener('click', () =>{
     document.getElementById('title-blockbuster').classList.remove('hide');
     document.getElementById('container-cards').classList.remove('hide');
@@ -126,13 +130,11 @@ btnBlockbusterMovies.addEventListener('click', () =>{
     document.getElementById('title-famous').classList.add('hide');
     document.getElementById('title-awarded').classList.add('hide');
     document.getElementById('title-realistic').classList.add('hide');    
-    arrBlockbuster = ''; 
-    arrBlockbuster = scifi.getSciFiData(blockbuster);
+
     document.getElementById('sort-menu').classList.remove('hide');
 });
 
 const btnRealisticMovies = document.getElementById('btn-realistic-movies');
-
 btnRealisticMovies.addEventListener('click', () =>{
     document.getElementById('title-realistic').classList.remove('hide'); 
     document.getElementById('container-cards').classList.remove('hide');
@@ -140,25 +142,16 @@ btnRealisticMovies.addEventListener('click', () =>{
     document.getElementById('title-awarded').classList.add('hide');
     document.getElementById('title-famous').classList.add('hide'); 
     document.getElementById('title-blockbuster').classList.add('hide'); 
-    arrMoreRealistic = ''; 
-    arrMoreRealistic = scifi.getSciFiData(moreRealistic);
+
+    scifi.showData(arrMoreRealistic);
     document.getElementById('sort-menu').classList.remove('hide');
 });
 
 const btnOrder = document.getElementById('sort-btn');
-
 btnOrder.addEventListener('click', ()=>{
     let orderAll = document.getElementById('filter').value;
     let orderSelected = document.getElementById('order-type').value;
     let arrData = arrMoviesTemp;
     let orderedData = scifi.orderData(arrData, orderAll, orderSelected );
-    scifi.getSciFiData(orderedData);
+    scifi.showData(orderedData);
 })
-
-
-
-
-
-
-
-
